@@ -9,5 +9,7 @@ userRouter.post("/register", registerUser)
 userRouter.post("/login", loginUser)
 userRouter.get("/checklogin", loginCheck)
 userRouter.get("/logout", logoutUser)
+userRouter.get("/nothing" , ()=>{
+});
 
 export { userRouter }
