@@ -87,9 +87,10 @@ async function loginUser(req, res) {
 
 
     const options = {
-        httpOnly: true,
-        secure: true,
-              maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "None",
     };
 
 
@@ -121,7 +122,7 @@ async function logoutUser(req, res) {
     const options = {
       httpOnly: true,
       secure: true,
-
+      sameSite: "None",
     };
 
 

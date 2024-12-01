@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://127.0.0.1:3000",
     credentials: true,
   })
 );
@@ -19,8 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //routes
-app.use("/jobs", jobRouter)
-app.use("/user", userRouter)
-
+app.use("/jobs", jobRouter);
+app.use("/user", userRouter);
 
 export { app };
