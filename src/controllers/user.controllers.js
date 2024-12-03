@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken"
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 async function generateAccessTokenRefeshToken(userId) {
 
@@ -178,4 +179,59 @@ async function loginCheck(req, res) {
 
 }
 
-export { registerUser, loginUser, logoutUser, loginCheck }
+async function getUserDetails(req , res){
+
+    const user_id = req.user?._id ;
+
+    const user = await User.findById(user_id).select("-password -refreshToken -_id -__v")
+
+        
+    if(!user){
+        return res.status(400).json({
+            Error : "Some error has occured while fetching the data"
+        })
+    }
+
+
+
+    return res.status(200).json(user)
+
+
+
+
+
+}
+
+
+ async function uploadProfilePic(req, res) {
+   let imageUrl = ""
+    try {
+     // Access the file buffer
+     const buffer = req.file.buffer;
+
+     // Upload the buffer to Cloudinary
+     const result = await uploadToCloudinary(buffer, "profilePictures");
+     imageUrl = result.secure_url 
+
+     // Send the response back with Cloudinary URL
+   } catch (error) {
+     console.error("Error uploading to Cloudinary:", error);
+     res.status(500).json({ error: "Failed to upload image" });
+   }
+
+   const user_id = req.user?._id 
+   const user = await User.findByIdAndUpdate(user_id , {
+    $set : {
+        profilePic : imageUrl
+    }
+   })
+
+        res.status(200).json({
+       message: "Image uploaded successfully!",
+       URL : imageUrl
+     });
+
+
+ };
+
+export { registerUser, loginUser, logoutUser, loginCheck , uploadProfilePic , getUserDetails }

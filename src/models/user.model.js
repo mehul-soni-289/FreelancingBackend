@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     skills : [] , 
     refreshToken: {
         type: String
+    } , 
+
+    profilePic : {
+        type : String 
     }
 
 
