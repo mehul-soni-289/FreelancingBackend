@@ -27,9 +27,10 @@ const jobSchema = new mongoose.Schema({
     type: String,
   },
   duration: {
-    type: String,
+    type: Number,
   },
-});
+
+}, {timestamps : true });
 
 const Job = mongoose.model("Job" , jobSchema) ;
 

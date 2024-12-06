@@ -4,7 +4,7 @@ import {
   logoutUser,
   loginCheck,
   uploadProfilePic,
-  getUserDetails
+  getUserDetails , 
 } from "../controllers/user.controllers.js";
 import { verifyLogin, verifyJWT } from "../middlewares/auth.middleware.js";
 import express from "express";
