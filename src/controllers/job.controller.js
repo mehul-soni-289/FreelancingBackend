@@ -99,11 +99,36 @@ async function search(req, res) {
   res.status(200).json(data);
 }
 
-async function sort(req, res) {
-  const { field } = req.query;
-  field = field.replace(",", " ");
+async function getJobsPagination(req, res) {
 
-  const data = find;
+  const {limit} = req.query
+  const {page} = req.query || 1
+
+  let jobs ;
+
+  if(limit){
+    const skip = (page - 1)*limit
+    jobs = await Job.find({})
+      .select("-__v")
+      .populate("postedBy", "fullname   -_id")
+      .lean()
+      .skip(skip)
+      .limit(limit);
+  }else{
+    jobs = await Job.find({})
+      .select("-__v")
+      .populate("postedBy", "fullname   -_id")
+      .lean();
+
+  }
+
+  
+  const expand = jobs.map((job) => ({
+    ...job,
+    postedBy: job.postedBy.fullname,
+  }));
+  return res.status(200).json(expand);
 }
 
-export { postJob, getJobs, getPostedJobs, getJobById, search };
+
+export { postJob, getJobs, getPostedJobs, getJobById, search , getJobsPagination };
