@@ -85,18 +85,30 @@ async function search(req, res) {
   if (!sort && title) {
     data = await Job.find({
       $or: [{ jobTitle: jobTitle }, { requiredSkills: skills }],
-    });
+    }).populate("postedBy", "fullname   -_id")
+      .lean();;
   } else if (sort && !title) {
     sort = sort.replace(","," ");
-    data = await Job.find({}).sort(sort);
+    data = await Job.find({})
+      .sort(sort)
+      .populate("postedBy", "fullname   -_id")
+      .lean();;
   } else if (sort && title) {
     sort = sort.replace(",", " ");
     data = await Job.find({
       $or: [{ jobTitle: jobTitle }, { requiredSkills: skills }],
-    }).sort(sort);
+    })
+      .sort(sort)
+      .populate("postedBy", "fullname   -_id")
+      .lean();;
   }
 
-  res.status(200).json(data);
+    const expand = data.map((job) => ({
+    ...job,
+    postedBy: job.postedBy.fullname,
+  }));
+
+  res.status(200).json(expand);
 }
 
 async function getJobsPagination(req, res) {
