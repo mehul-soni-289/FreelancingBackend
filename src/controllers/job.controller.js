@@ -40,10 +40,27 @@ async function postJob(req, res) {
 }
 
 async function getJobs(req, res) {
-  const jobs = await Job.find({})
-    .select("-__v")
-    .populate("postedBy", "fullname   -_id")
-    .lean();
+
+  const { limit } = req.query;
+  const { page } = req.query || 1;
+
+  let jobs;
+
+  if (limit) {
+    const skip = (page - 1) * limit;
+    jobs = await Job.find({})
+      .select("-__v")
+      .populate("postedBy", "fullname   -_id")
+      .lean()
+      .skip(skip)
+      .limit(limit);
+  } else {
+    jobs = await Job.find({})
+      .select("-__v")
+      .populate("postedBy", "fullname   -_id")
+      .lean();
+  }
+
   const expand = jobs.map((job) => ({
     ...job,
     postedBy: job.postedBy.fullname,
