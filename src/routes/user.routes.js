@@ -21,5 +21,4 @@ userRouter.get("/nothing", (req, res) => {
 });
 userRouter.get("/userdata",verifyJWT , getUserDetails)
 userRouter.post("/profilePic", upload.single("image"), verifyJWT , uploadProfilePic);
-
 export { userRouter };

@@ -29,6 +29,11 @@ const jobSchema = new mongoose.Schema({
   duration: {
     type: Number,
   },
+  status : {
+    type : String , 
+    default : 'pending'
+  }
+
 
 }, {timestamps : true });
 
