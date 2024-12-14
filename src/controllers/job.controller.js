@@ -326,7 +326,7 @@ async function viewAppliedJobs(req, res) {
 
   if (jobs.length == 0 || !jobs) {
     return res.status(400).json({
-      Error: "You have not applied for any jobs",
+      Error: "No job Found",
     });
   }
 
