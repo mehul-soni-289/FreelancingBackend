@@ -325,9 +325,7 @@ async function viewAppliedJobs(req, res) {
   ]);
 
   if (jobs.length == 0 || !jobs) {
-    return res.status(400).json({
-      Error: "No job Found",
-    });
+    return res.status(200).json([]);
   }
 
   const finalObject = [];
