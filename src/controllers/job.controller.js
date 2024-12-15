@@ -409,6 +409,35 @@ async function getCount(req , res){
 
 }
 
+async function getJobsWithApplications(req ,res) {
+
+  const userId = req.user?._id 
+
+  const jobs = await Job.find({
+    postedBy : userId 
+  })  
+
+  let arr = []
+
+  for (const job of jobs){
+
+    const count = await Application.find({jobId : job._id , status : "pending"}).countDocuments()
+
+
+
+    if(count>0){
+
+      
+       arr.push(job)
+    }
+
+  }
+
+
+  return res.status(200).json(arr)
+  
+}
+
 export {
   postJob,
   getJobs,
@@ -420,5 +449,6 @@ export {
   viewApplicants,
   viewAppliedJobs,
   acceptJob,
-  getCount
+  getCount , 
+  getJobsWithApplications
 };
