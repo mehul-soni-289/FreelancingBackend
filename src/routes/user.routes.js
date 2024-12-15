@@ -5,6 +5,7 @@ import {
   loginCheck,
   uploadProfilePic,
   getUserDetails , 
+  getUser
 } from "../controllers/user.controllers.js";
 import { verifyLogin, verifyJWT } from "../middlewares/auth.middleware.js";
 import express from "express";
@@ -21,4 +22,5 @@ userRouter.get("/nothing", (req, res) => {
 });
 userRouter.get("/userdata",verifyJWT , getUserDetails)
 userRouter.post("/profilePic", upload.single("image"), verifyJWT , uploadProfilePic);
+userRouter.get('/getUser/:username' , getUser)
 export { userRouter };

@@ -231,7 +231,21 @@ async function getUserDetails(req , res){
        URL : imageUrl
      });
 
-
  };
 
-export { registerUser, loginUser, logoutUser, loginCheck , uploadProfilePic , getUserDetails }
+ async function getUser(req , res) {
+    const username = req.params?.username 
+
+    if(!username) {
+        return res.status(400).json({
+            Error : "Provide username"
+        })
+    }
+
+    const user = await User.find({username : username}).select("-password -refreshToken")
+
+    return res.status(200).json(user)
+    
+ }
+
+export { registerUser, loginUser, logoutUser, loginCheck , uploadProfilePic , getUserDetails ,getUser }
