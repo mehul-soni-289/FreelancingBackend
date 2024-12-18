@@ -262,6 +262,7 @@ async function viewApplicants(req, res) {
 
   jobs.forEach((job) => {
     job.applicant[0]["applicationId"] = job._id;
+    job.applicant[0]["proposal"] = job.proposal
     applicants.push(job.applicant[0]);
   });
 
