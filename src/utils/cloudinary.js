@@ -26,12 +26,16 @@ function bufferToStream(buffer) {
 }
 
 // Function to upload buffer to Cloudinary
-async function uploadToCloudinary(buffer, folder) {
+async function uploadToCloudinary(buffer, folder , options = {}) {
   const stream = bufferToStream(buffer);
 
   return new Promise((resolve, reject) => {
     const cloudinaryStream = cloudinary.uploader.upload_stream(
-      { folder: folder },
+      { folder: folder , 
+        resource_type : options.resource_type || 'auto' 
+
+      },
+  
       (error, result) => {
         if (error) {
           return reject(error);

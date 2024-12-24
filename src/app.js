@@ -3,6 +3,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { jobRouter } from "./routes/job.routes.js";
 import { userRouter } from "./routes/user.routes.js";
+import { assetRouter } from "./routes/assets.routes.js";
+import { sellRouter } from "./routes/sell.routes.js";
 
 const app = express();
 
@@ -21,5 +23,6 @@ app.use(cookieParser());
 //routes
 app.use("/jobs", jobRouter);
 app.use("/user", userRouter);
-
+app.use ("/assets" , assetRouter )
+app.use("/buy" , sellRouter )
 export { app };
