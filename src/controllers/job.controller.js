@@ -237,6 +237,7 @@ async function viewApplicants(req, res) {
     {
       $match: {
         jobId: new mongoose.Types.ObjectId(jobId),
+        status : 'pending'
       },
     },
     {
@@ -376,13 +377,18 @@ async function acceptJob(req, res) {
     });
   }
 
-  job.status = "ongoing";
-  await job.save();
 
-  await Application.deleteMany({
-    jobId: jobId,
-    status: "pending",
-  });
+
+
+
+    job.status = "ongoing";
+    await job.save();
+
+      await Application.deleteMany({
+        jobId: jobId,
+        status: "pending",
+      });
+
 
   return res.status(200).json({
     Ongoing: "The job is set to ongoing",
