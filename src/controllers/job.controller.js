@@ -41,7 +41,7 @@ async function postJob(req, res) {
 }
 
 async function getJobs(req, res) {
-
+  const userId = req.user?._id
   const { limit } = req.query;
   const { page } = req.query || 1;
 
@@ -49,14 +49,19 @@ async function getJobs(req, res) {
 
   if (limit) {
     const skip = (page - 1) * limit;
-    jobs = await Job.find({status:"pending"})
+    jobs = await Job.find({status:"pending" , 
+      postedBy : {$ne : userId}}
+    )
       .select("-__v")
       .populate("postedBy", "fullname   -_id")
       .lean()
       .skip(skip)
       .limit(limit);
   } else {
-    jobs = await Job.find({status:"pending"})
+    jobs = await Job.find({
+      status: "pending",
+      postedBy: { $ne: userId } ,
+    })
       .select("-__v")
       .populate("postedBy", "fullname   -_id")
       .lean();
@@ -112,20 +117,21 @@ async function getJobById(req, res) {
 async function search(req, res) {
   const { title } = req.query;
   let sort = req.query?.sort;
-
   const skills = { $regex: title, $options: "i" };
   const jobTitle = { $regex: title, $options: "i" };
+  const userId = req.user?._id
   let data;
 
   if (!sort && title) {
     data = await Job.find({
       $or: [{ jobTitle: jobTitle }, { requiredSkills: skills }],
+      postedBy : {$ne : userId}
     })
       .populate("postedBy", "fullname   -_id")
       .lean();
   } else if (sort && !title) {
     sort = sort.replace(",", " ");
-    data = await Job.find({})
+    data = await Job.find({ postedBy: { $ne: userId } })
       .sort(sort)
       .populate("postedBy", "fullname   -_id")
       .lean();
@@ -133,6 +139,7 @@ async function search(req, res) {
     sort = sort.replace(",", " ");
     data = await Job.find({
       $or: [{ jobTitle: jobTitle }, { requiredSkills: skills }],
+      postedBy: { $ne: userId },
     })
       .sort(sort)
       .populate("postedBy", "fullname   -_id")
