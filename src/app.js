@@ -5,7 +5,7 @@ import { jobRouter } from "./routes/job.routes.js";
 import { userRouter } from "./routes/user.routes.js";
 import { assetRouter } from "./routes/assets.routes.js";
 import { sellRouter } from "./routes/sell.routes.js";
-
+import { ongoingRouter } from "./routes/ongoing.routes.js";
 const app = express();
 
 app.use(
@@ -25,4 +25,6 @@ app.use("/jobs", jobRouter);
 app.use("/user", userRouter);
 app.use ("/assets" , assetRouter )
 app.use("/buy" , sellRouter )
+app.use('/ongoing', ongoingRouter)
+
 export { app };
